@@ -111,6 +111,29 @@ async function run() {
       const result = await  galleryCollection.find().toArray();
       res.send(result);
     });
+
+    app.patch('/users/:id', async (req, res) => {
+      try {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const update = req.body;
+        const updateDoc = {
+          $set: {
+            status: update.status
+          },
+        };
+    
+        const result = await userCollection.updateOne(filter, updateDoc);
+        console.log('Update result:', result);
+    
+        res.send(result);
+      } catch (error) {
+        console.error('Error in patch endpoint:', error);
+        res.status(500).send({ error: 'Internal Server Error' });
+      }
+    });
+    
+
     app.patch('/users/HR/:id',  async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
